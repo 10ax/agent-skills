@@ -1,0 +1,8 @@
+# scratch
+*.tmp
+*.bak
+.DS_Store
+
+# rendered flowcharts / diagrams
+*.svg.out
+render-out/
