@@ -8,37 +8,6 @@ A loose idea has arrived, too big for one agent session, and wrapped in fog: the
 
 The destination varies per effort, and naming it is the first act of charting: it shapes every ticket. It might be a spec to hand off and iterate on, a decision to lock before planning starts, or a change made in place like a data-structure migration. The map is domain-agnostic: engineering work, course content, whatever fits the shape.
 
-## Quick reference
-
-This section is an index too: it gists the rules and points at the sections that hold them. Nothing here replaces reading them.
-
-**Judgement calls**
-
-| You are facing | Do this | Detail |
-| --- | --- | --- |
-| A question you can phrase sharply, even one you cannot act on yet | Ticket it, blocked if need be | [Fog of war](#fog-of-war) |
-| A question you can feel coming but cannot yet phrase sharply | Leave it in **Not yet specified**, uncut: one patch may graduate into several tickets, or none | [Fog of war](#fog-of-war) |
-| Work that sits past the **destination** | Close the ticket, leave one line in **Out of scope**, and keep it out of Decisions so far | [Out of scope](#out-of-scope) |
-| A fact from outside the working directory that a decision waits on | `research`, AFK, resolved by a subagent | [Ticket Types](#ticket-types) |
-| "How should it look" or "how should it behave" | `prototype`, HITL, with the artifact linked from the issue | [Ticket Types](#ticket-types) |
-| Any other decision, which is the default | `grilling`, HITL, alongside domain-modeling | [Ticket Types](#ticket-types) |
-| Manual work with nothing to decide, blocking a decision | `task`, driven alone where you can, else a precise checklist for the human | [Ticket Types](#ticket-types) |
-| Charting that surfaces no fog at all | No map is needed. Stop and ask the user how to proceed | [Chart the map](#chart-the-map) |
-| The pull to stop deciding and start building | You are at the edge of the map. Hand off, unless this effort's **Notes** carries execution into the map | [Plan, don't do](#plan-dont-do) |
-
-**True every session**
-
-| Invariant | Detail |
-| --- | --- |
-| One ticket per session, `research` excepted | [Invocation](#invocation) |
-| Claim a ticket by assigning it to the driving dev *before* any work, so concurrent sessions skip it | [Tickets](#tickets) |
-| Name every map and ticket by its title in everything the human reads, never by a bare id | [Refer by name](#refer-by-name) |
-| Produce decisions, not deliverables | [Plan, don't do](#plan-dont-do) |
-| Gist and link on the map: a decision's detail lives in exactly one place, its ticket | [The Map](#the-map) |
-| Create the issues, then wire blocking in a second pass, because issues need ids to reference each other | [Chart the map](#chart-the-map) |
-| Never answer the human's side of a HITL ticket | [Ticket Types](#ticket-types) |
-| Load the map once at low resolution, then zoom ticket bodies on demand | [Work through the map](#work-through-the-map) |
-
 ## Plan, don't do
 
 Wayfinder is **planning** by default: each ticket resolves a decision, and the map is done when the way is clear, with nothing left to decide before someone goes and does the thing. The pull to just do the work is usually the signal you've reached the edge of the map and it's time to hand off. An effort can override this in its **Notes**, carrying execution into the map itself, but absent that, produce decisions, not deliverables.
@@ -105,10 +74,12 @@ The answer isn't part of the body; it's recorded on resolution (see [Work throug
 
 Every ticket is either **HITL** (human in the loop, worked _with_ a human who speaks for themselves) or **AFK**, driven by the agent alone. A HITL ticket only resolves through that live exchange; the agent never stands in for the human's side of it (a grilling agent that answers its own questions has broken this).
 
-- **Research** (AFK): Reading documentation, third-party APIs, or local resources like knowledge bases to surface a fact a decision waits on. Resolved by a subagent that calls the Skill tool with "research". Use when knowledge outside the current working directory is required.
-- **Prototype** (HITL): Raise the fidelity of the discussion by making a cheap, rough, concrete artifact to react to (an outline, a rough take, a stub, or UI/logic code) by calling the Skill tool with "prototype". Links the prototype as an asset. Use when "how should it look" or "how should it behave" is the key question.
-- **Grilling** (HITL): Conversation. The default case. Always call the Skill tool twice, for "grilling" and "domain-modeling".
-- **Task** (HITL or AFK): Manual work that must happen before a _decision_ can be made: nothing to decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a service so its API can be judged, provisioning access, moving data so its shape can be seen. This is the one type that _does_ rather than decides, and it earns its place by unblocking a decision, not by delivering the destination. The agent drives it alone where it can (AFK); otherwise it hands the human a precise checklist (HITL). Resolved when the work is done; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on.
+| Type | Mode | Reach for it when | Resolved by |
+| --- | --- | --- | --- |
+| `research` | AFK | Knowledge outside the current working directory is required: documentation, third-party APIs, or local resources like knowledge bases, to surface a fact a decision waits on | A subagent that calls the Skill tool with "research" |
+| `prototype` | HITL | "How should it look" or "how should it behave" is the key question. Raise the fidelity of the discussion with a cheap, rough, concrete artifact to react to: an outline, a rough take, a stub, or UI/logic code | Calling the Skill tool with "prototype", linking the prototype as an asset |
+| `grilling` | HITL | Conversation. The default case | Always calling the Skill tool twice, for "grilling" and "domain-modeling" |
+| `task` | HITL or AFK | Manual work must happen before a _decision_ can be made: nothing to decide, prototype, or research, but the discussion is blocked until it's done. Signing up for a service so its API can be judged, provisioning access, moving data so its shape can be seen. The one type that _does_ rather than decides, it earns its place by unblocking a decision, not by delivering the destination | The agent alone where it can (AFK), otherwise a precise checklist for the human (HITL). Resolved when the work is done; the answer records what was done and any resulting facts (credentials location, new URLs, row counts) later tickets depend on |
 
 ## Fog of war
 
@@ -116,10 +87,15 @@ The map is _deliberately_ incomplete: don't chart what you can't yet see. Beyond
 
 The map's **Not yet specified** section is where that dim view is written down: the suspected question, the area to revisit later. It's the undiscovered frontier _toward_ the destination: everything here is in scope, just not sharp enough to ticket. Write as loosely or as fully as the view allows; it doubles as a signpost for collaborators reading where the effort is headed.
 
-**Fog or ticket?** The test is whether you can state the question precisely now, _not_ whether you can answer it now.
+**Fog or ticket?** Check scope first, then sharpness: the sharpness test is whether you can state the question precisely now, _not_ whether you can answer it now.
 
-- **Ticket when** the question is already sharp, even if it's blocked and you can't act on it yet.
-- **Not yet specified when** you can't yet phrase it that sharply. Don't pre-slice the fog into ticket-sized pieces: it's coarser than a ticket, and one patch may graduate into several tickets, or none, once the frontier reaches it.
+| Where it sits | Where it goes |
+| --- | --- |
+| Beyond the destination, ticketed or not | **Out of scope**, never fog (see [Out of scope](#out-of-scope)) |
+| In scope, and you can state the question precisely now | A **ticket**, even one that's blocked and can't be acted on yet |
+| In scope, but you can't yet phrase it that sharply | **Not yet specified** |
+
+Don't pre-slice the fog into ticket-sized pieces: it's coarser than a ticket, and one patch may graduate into several tickets, or none, once the frontier reaches it.
 
 **Not yet specified** excludes what's already decided (Decisions so far), what's already a live ticket, and what's out of scope (the next section).
 

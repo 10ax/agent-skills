@@ -47,15 +47,31 @@ Then match the form to the failure, because the form that fixes one kind measura
 No nuance clauses. "Don't do X unless it matters" reopens the negotiation and measurably degrades a
 rule that otherwise held. Express a real exception as its own conditional on an observable predicate.
 
-## Every skill is skimmable
+## Every skill is skimmable, and you make it so in place
 
 A skill is read by an agent that is mid-task and under pressure. If the operational rules can only be
 recovered by reading every paragraph, the skill is too dense, however well written the paragraphs are.
-Anything past roughly 1000 words carries a `## Quick reference` near the top: the judgement calls in
-one table, the invariants in another, each row a gist plus a link to the section holding the detail.
 
-The quick reference is an index, not a replacement. Say so in the section itself, and keep every row
-short enough that it cannot be mistaken for the rule in full.
+The fix is to find the places the reader actually **branches** (which of these four types is this?
+does this go in the backlog or the fog?) and put the branch in a table **where it already lives**,
+replacing the prose rather than summarising it. Branches belong in a table or a list, never in a
+paragraph.
+
+**Do not add a summary or quick-reference section at the top of a skill.** It looks like the obvious
+answer and it is a trap, for three reasons that compound:
+
+- A summary is a shortcut the agent takes *instead of* reading the body. This is documented one level
+  up, for descriptions that summarise a workflow: the agent performs the summary and skips the skill.
+  A disclaimer does not close it. "This does not replace reading the section" is unobservable, so
+  nothing binds, and it fails hardest under exactly the pressure that motivated the summary.
+- Compression silently drops the guardrails. A rule reads as "do X, unless Y" in prose and comes out
+  as "do X unless Y" in a cell, with the exemption now sitting in the most-read block of the file.
+  The permissive half of a sentence survives compression better than the constraint half does.
+- It duplicates meaning. The same rule in two places costs maintenance, drifts, and inflates that
+  rule's prominence past its real rank, usually above whichever rule is actually broken most often.
+
+A table that replaces its section has none of these properties: one copy, nothing ranked above the
+rules, and nothing to read instead of the skill.
 
 ## Keep it cheap
 
@@ -85,7 +101,7 @@ markdown tables in any skill.
 - [ ] `name` is hyphenated, lowercase, verb-first
 - [ ] `description` gives triggers only, in the third person, with no workflow summary
 - [ ] Guidance form matches the failure type
-- [ ] `## Quick reference` present if the skill is over ~1000 words
+- [ ] Branch-points tabled in place; no summary section added
 - [ ] Re-run the scenario with the skill: does the agent now comply?
 - [ ] New rationalisations found in that run are answered explicitly
 - [ ] No narrative storytelling ("in one session I found...")
