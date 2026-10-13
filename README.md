@@ -31,6 +31,12 @@ Symlinks, not copies: edit a skill in this repo and the change is live in the ne
 reinstall step. This deliberately differs from how `10ax/dotfiles` works (collect-and-install there),
 because skills are edited far more often than dotfiles and the copy step is pure friction.
 
+On this machine the targets are `~/.config/opencode/skills` (OpenCode) and `~/.claude/skills`
+(Claude Code), and `10ax/dotfiles` runs both during a restore after cloning this repo. A target that
+already exists and is not one of our symlinks is skipped rather than replaced, so a real directory
+has to be removed first. `forks/caveman` is deliberately **not** linked into the Claude Code target:
+that side gets caveman from its own marketplace, and two skills of the same name would collide.
+
 Run `./install.sh --list` to see what is linked and what is stale.
 
 ## Where skills come from
