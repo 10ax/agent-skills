@@ -1,0 +1,23 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "",
+                "Name": "__AUTHOR__"
+            }
+        ],
+        "Category": "System Information",
+        "Description": "__ONE_LINE_DESCRIPTION__",
+        "EnabledByDefault": true,
+        "Icon": "__ICON_NAME__",
+        "Id": "__reverse.dns.id__",
+        "License": "MIT",
+        "Name": "__Human Name__",
+        "Version": "0.1.0",
+        "Website": "https://__URL__"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationArea": true,
+    "X-Plasma-NotificationAreaCategory": "SystemServices"
+}
