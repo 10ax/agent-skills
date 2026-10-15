@@ -95,3 +95,5 @@ Two commits, not one: the tooling/tests/docs change, then the collected snapshot
 ## Reference
 
 - `reference/collect-internals.md` — what the collector reads and writes, the mode manifest, `ETC_REFERENCE`/`ETC_DENY`, the redaction and the scan, and the guards
+
+The reference file opens with the claims most likely to have drifted, and the command to re-check each. Prefer the check over the claim.

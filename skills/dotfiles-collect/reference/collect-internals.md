@@ -2,6 +2,20 @@
 
 Depth for `dotfiles-collect`. Verified against the script on 2026-10-15; the script is the authority if this drifts.
 
+## Re-verify before trusting
+
+| Claim | Check it with |
+|---|---|
+| the suites exist and what they report | run them: `./test/drift/run.sh`, `./test/restore/run.sh`, `./test/toolchain/run.sh`, `./test/systemd-guard/run.sh` |
+| the CI gate's exact command | `grep -n shellcheck ~/dotfiles/.github/workflows/restore-test.yml` |
+| `ETC_REFERENCE` / `ETC_DENY` contents | `sed -n '/ETC_REFERENCE=(/,/^)/p' ~/dotfiles/lib/manifest.sh` |
+| which categories `--check` compares | `grep -n -A6 DRIFT_CATEGORIES ~/dotfiles/lib/manifest.sh` |
+| the guard names and what they gate | `grep -n 'INCOMPLETE' ~/dotfiles/collect.sh \| head` |
+| the umask pin and the scan's excludes | `grep -n 'umask\|--exclude=' ~/dotfiles/collect.sh` |
+| which hosts are recorded | `ls ~/dotfiles/hosts/` |
+| the mode manifest still has entries | `wc -l ~/dotfiles/hosts/*/permissions.txt` |
+| the ssh key names | `ls ~/.ssh/id_ed25519_*` |
+
 ## What it writes
 
 `collect.sh` runs on the machine being collected (`$(hostname)` → `hosts/<host>/`). It writes:
