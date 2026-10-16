@@ -129,7 +129,13 @@ directory, so a path match can span sessions from other projects.
 `pstack/skills/make-bot-ui` is gone, because it drives Cursor's `api2.cursor.sh`
 automation webhook and nothing it describes can work here.
 
-### 6. Not changed, deliberately
+### 6. Frontmatter names
+
+`poteto-mode/SKILL.md` kept upstream's `name: Poteto Mode` even though every other
+skill in this tree names itself with its directory, which is the id OpenCode
+resolves a skill by. The field now reads `poteto-mode` like all the others.
+
+### 7. Not changed, deliberately
 
 - **`pstack/skills/typescript-best-practices/`** and the other skills with no
   harness coupling are byte-identical. They were not opened.
