@@ -775,7 +775,7 @@ function summarize(
     openGateIds: gateRows
       .filter((gate): gate is OpenGate => gate.kind === "open")
       .map((gate) => gate.id)
-      .sort(),
+      .sort((a, b) => a.localeCompare(b)),
   };
 }
 
@@ -859,7 +859,7 @@ function changed(before: StatusSummary | null, after: StatusSummary): string {
   for (const { label, oldCounts, newCounts } of groups) {
     const names = [
       ...new Set([...Object.keys(oldCounts), ...Object.keys(newCounts)]),
-    ].sort();
+    ].sort((a, b) => a.localeCompare(b));
     for (const name of names) {
       const oldCount = oldCounts[name] ?? 0;
       const newCount = newCounts[name] ?? 0;
