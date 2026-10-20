@@ -569,12 +569,14 @@ function handleError(error: unknown, program: Command, io: Io): number {
   return 1;
 }
 
+const DEFAULT_IO: Io = {
+  stdout: (value) => process.stdout.write(value),
+  stderr: (value) => process.stderr.write(value),
+};
+
 export async function main(
   argv: readonly string[],
-  io: Io = {
-    stdout: (value) => process.stdout.write(value),
-    stderr: (value) => process.stderr.write(value),
-  }
+  io: Io = DEFAULT_IO
 ): Promise<number> {
   const program = createProgram(io);
   try {

@@ -46,9 +46,17 @@ if (raw[0] === "---") {
 const lines = [];
 let fence = null;
 const openingFence = (text) => {
-	const match = text.match(/^ {0,3}(`{3,}|~{3,})(.*)$/);
-	if (!match || (match[1][0] === "`" && match[2].includes("`"))) return null;
-	return { char: match[1][0], length: match[1].length };
+	let spaces = 0;
+	while (spaces < 3 && text[spaces] === " ") spaces += 1;
+	const marker = text[spaces];
+	if (marker !== "`" && marker !== "~") return null;
+	let end = spaces;
+	while (text[end] === marker) end += 1;
+	const length = end - spaces;
+	if (length < 3) return null;
+	const info = text.slice(end);
+	if (marker === "`" && info.includes("`")) return null;
+	return { char: marker, length };
 };
 const closingFence = (text, opening) => {
 	const match = text.match(/^ {0,3}(`+|~+)[ \t]*$/);
