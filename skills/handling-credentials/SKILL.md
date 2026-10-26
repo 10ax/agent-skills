@@ -1,6 +1,6 @@
 ---
 name: handling-credentials
-description: Use when a task touches a password, API key, token, secret, .env file, credentials config, or when asked to show, print, cat, echo, copy, paste, compare or prove the value of one. Symptoms include "just cat it", "I need it exactly", "are these two the same", and a secret appearing in tool output.
+description: Use when a task touches a password, API key, token, secret, .env file, credentials config, or when asked to show, print, cat, echo, copy, paste, compare or prove the value of one, and when moving a secret between machines, into an .env, or into a container. Symptoms include "just cat it", "I need it exactly", "are these two the same", a secret appearing in tool output, and a command whose failure could echo its input.
 ---
 
 # Handling credentials
@@ -42,6 +42,35 @@ path, and never put a secret in a command whose failure prints its arguments.
 Red flags that you are about to leak: typing `cat`, `echo`, `printenv`, `env`, or `grep NAME` on a
 credentials file; writing a table with a "value" column; quoting a config line back at the user;
 pasting a `.env` into a diff, a commit message, or a test fixture.
+
+## Moving a secret to another host, or into a service's `.env`
+
+Reading a secret safely is only half the job. The transfer is where a value most often reaches
+tool output, because the failing command prints what it was fed.
+
+Copy the **file**, let a script read it:
+
+```sh
+scp -q local.env host:/root/local.env          # 600, contents never on a command line
+ssh host 'python3 /root/merge.py'              # script reads the file, validates, writes, shreds
+ssh host 'grep -c "^NAME=" /opt/service/.env'  # a count, never a value
+```
+
+Never:
+
+- **Two stdin redirections on one command** — `ssh host 'python3 -' < secret.env <<'PY'`. Whichever
+  the shell applies last wins; the other stream goes to the wrong reader, and a parser error then
+  prints the secret as source code. This happened on 2026-10-21 and put a Last.fm shared secret
+  into a session.
+- **An unquoted here-document delimiter** around a block that contains `${VAR}` or `$VAR` — the
+  shell expands it before the interpreter sees it. The result is an empty value written into a
+  config, which is silent until the service starts and validates nothing. Use `<<'PY'`.
+- `ssh host "echo $SECRET"`, `curl -d "$SECRET"`, `docker run -e SECRET=$SECRET` — argv is visible
+  in `ps`, in shell history, and in any error that quotes the command.
+- Piping a secret into anything whose failure prints its input.
+
+Rule of thumb: if the command can fail while holding the value, the value can reach tool output.
+Keep the value inside a file and read it from a script that prints only counts and verdicts.
 
 ## Verification and masking
 
