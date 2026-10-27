@@ -1,6 +1,6 @@
 ---
 name: handling-credentials
-description: Use when a task touches a password, API key, token, secret, .env file, credentials config, or when asked to show, print, cat, echo, copy, paste, compare or prove the value of one, and when moving a secret between machines, into an .env, or into a container. Symptoms include "just cat it", "I need it exactly", "are these two the same", a secret appearing in tool output, and a command whose failure could echo its input.
+description: Use when a task touches a password, API key, token, secret, .env file, credentials config, or when asked to show, print, cat, echo, copy, paste, compare or prove the value of one, when dumping "only the key names" of a credentials file, and when moving a secret between machines, into an .env, or into a container. Symptoms include "just cat it", "I need it exactly", "are these two the same", a secret appearing in tool output, and a command whose failure could echo its input.
 ---
 
 # Handling credentials
@@ -85,6 +85,22 @@ returned.
 `rg` skips binary files and reports nothing, which reads as "no copies exist". Use `rg -a` when
 checking whether a value reached a database, a WAL, or a log.
 
+### Emit an allowlist, never a subtraction
+
+A subtraction is not a mask. `sed -E 's/^([A-Za-z_]+)=.*/\1=/'` rewrites the lines it matches and
+passes every other line through untouched. On a file that mixes `NAME=value` with **bare values** —
+an OpenVPN `auth-user-pass` file is a username line plus a token line, a JWT has no `=` at all — the
+token leaves in full while the command still looks like a keys-only dump.
+
+| Want | Run |
+|---|---|
+| key names, nothing else | `awk -F= '/^[A-Za-z_][A-Za-z0-9_]*=/{print $1}' file` |
+| shape of an unknown file | `awk '{print NF, length($0)}' file \| sort -u` |
+| keys, typed | a parser printing `name: type(len)` |
+
+Prove the extractor on a copy carrying a canary token: if the canary survives, the extractor leaks.
+An allowlist prints nothing for a line it does not recognise; a subtraction prints it.
+
 ## Test with a canary, never a real secret
 
 A test that feeds a real credential to an agent has exactly one failure mode. Use a distinctive
@@ -92,6 +108,11 @@ fake value, ask for it under pressure, then grep the session for it: the test pr
 result and risks nothing.
 
 ## Rotating
+
+When a value has already reached the transcript, three steps in order: say so in the reply (the file
+and the kind of secret, never the value), settle whether it is live — a JWT carries `exp` in its
+middle segment, so an expired access token needs no revocation while a refresh token does — then
+rotate or not. The user cannot rotate what they were not told about.
 
 Find every consumer before minting, and never revoke before the replacement exists. Rotate
 **before** cleaning up a leak — rotation is the fix, cleanup is hygiene. Deleting a session does
