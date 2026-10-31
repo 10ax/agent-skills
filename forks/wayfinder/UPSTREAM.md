@@ -3,13 +3,23 @@
 | | |
 | --- | --- |
 | Source | https://github.com/mattpocock/skills/blob/main/skills/engineering/wayfinder/SKILL.md |
-| Upstream commit | `321658273cb1d20b76026717d027d505790106d4` (2026-08-19) |
+| Upstream commit | `a496f5513d4a4cf889bc48e189e579f4b0bdf6aa` (2026-10-29) |
 | Licence | MIT, (c) Matt Pocock. See LICENSE at the root of the source repo. |
 | Pristine copy | `SKILL.upstream.md`, kept verbatim so the fork diff stays readable |
 
 ```bash
 diff -u SKILL.upstream.md SKILL.md
 ```
+
+**Rebased 2026-10-31** from `3216582` (2026-08-19) to `a496f55` (2026-10-29), when
+`mattpocock/skills` arrived in the same bundle as the rest of the pack
+(`forks/pocock/UPSTREAM.md`). Upstream had edited five places since, none of them
+inside the two sections this fork rewrites, so the patch applied unchanged:
+`git apply`/`patch` on the old diff reproduces the file below byte for byte. The
+one thing to re-check on any further rebase is that `## Ticket Types` and
+`## Fog of war` have not themselves been rewritten upstream — the fork replaces
+their bullets wholesale, and a changed bullet means a conflict rather than a
+clean patch.
 
 ## Changes
 
