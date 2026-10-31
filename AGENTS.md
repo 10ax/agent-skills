@@ -105,3 +105,17 @@ markdown tables in any skill.
 - [ ] Re-run the scenario with the skill: does the agent now comply?
 - [ ] New rationalisations found in that run are answered explicitly
 - [ ] No narrative storytelling ("in one session I found...")
+
+## Agent skills
+
+### Issue tracker
+
+GitHub Issues on `10ax/agent-skills`, through the `gh` CLI. See `docs/agents/issue-tracker.md`.
+
+### Triage labels
+
+The five canonical roles, label strings unchanged. See `docs/agents/triage-labels.md`.
+
+### Domain docs
+
+Single-context: `GLOSSARY.md` and `docs/adr/` at the repo root. See `docs/agents/domain.md`.
