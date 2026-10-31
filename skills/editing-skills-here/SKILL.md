@@ -24,7 +24,7 @@ survives; an edit that stops parsing deletes a skill silently.
 | symlink in `~/.config/opencode/skills` | yes; a restore clones that repo and relinks |
 | real dir in `~/.config/opencode/skills` | until the next manual reinstall: `collect.sh` excludes `skills/`, so a restore loses it |
 | a directory registered from the `skills` array in `opencode.json` (`forks/pocock`, `forks/cursor-plugins`, the homelab repo) | yes, and it is not a symlink: edit the file where it lives in that repo, then commit it there. `install.sh` does not link it — the array is the registration |
-| `~/.agents/skills/<id>` | nothing. `npx skills update` rewrites the file; remove the `~/.agents/.skill-lock.json` entry too or it returns |
+| `~/.agents/skills/<id>` | nothing, and `npx skills update` does not even try: the directory is restored from `lib/agents-skills.tsv` in ~/dotfiles by `bin/restore-agents-skills.sh`, and `~/.agents/.skill-lock.json` was deleted on 2026-10-31 so the CLI has no keys to walk. `npx skills add` is the way back in, and it installs the whole pack |
 
 Provenance for `~/.config/opencode/skills` is in
 `~/dotfiles/hosts/atlas/opencode/skills.txt`, from `SKILL_SOURCES` in `lib/manifest.sh`;
