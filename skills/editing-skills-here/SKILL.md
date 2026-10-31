@@ -5,7 +5,7 @@ description: Use when adding, editing, hiding or deleting an agent skill on atla
 
 # Editing skills on atlas
 
-Four sources own skills on this machine, and the source decides whether an edit
+Five sources own skills on this machine, and the source decides whether an edit
 survives; an edit that stops parsing deletes a skill silently.
 
 ## When to use
@@ -23,6 +23,7 @@ survives; an edit that stops parsing deletes a skill silently.
 | `~/Personal/code/agent-skills/skills/<id>`, symlinked in | anything — your own skills belong here |
 | symlink in `~/.config/opencode/skills` | yes; a restore clones that repo and relinks |
 | real dir in `~/.config/opencode/skills` | until the next manual reinstall: `collect.sh` excludes `skills/`, so a restore loses it |
+| a directory registered from the `skills` array in `opencode.json` (`forks/pocock`, `forks/cursor-plugins`, the homelab repo) | yes, and it is not a symlink: edit the file where it lives in that repo, then commit it there. `install.sh` does not link it — the array is the registration |
 | `~/.agents/skills/<id>` | nothing. `npx skills update` rewrites the file; remove the `~/.agents/.skill-lock.json` entry too or it returns |
 
 Provenance for `~/.config/opencode/skills` is in
@@ -34,12 +35,15 @@ a real directory missing from that list is recorded as `unknown` there.
 | Mechanism | Survives an update | Loadable as `@id` |
 | --- | --- | --- |
 | `{"action":"skill","resource":"<id>","effect":"deny"}` in `opencode.json` | yes | no |
-| `metadata: {opencode/autoinvoke: false}` in the SKILL.md | only in a skill you own | yes |
+| `disable-model-invocation: true` in the SKILL.md frontmatter (OpenCode reads it; `metadata: {opencode/autoinvoke: false}` is the older spelling) | yes in a file you own or a fork; never in `~/.agents/skills` | yes |
 | delete it, and its `SKILL_SOURCES` line | yes | no |
 
-Prefer the permission: dotfiles tracks it, it never touches a file an updater owns, and
-deleting the rules undoes it. Rules run in order and the last match wins, so a broad
-`allow` must come first, and agent-level rules are applied after global ones.
+The flag is what the bundles use: 53 of the 54 skills in `forks/cursor-plugins` and
+16 of the 25 in `forks/pocock` are hidden that way, and it costs nothing because a
+fork is a file you own. The permission below is for third-party skills you do not
+own and cannot edit; the `permissions` array is **empty since 2026-10-31**, when the
+last rule left with the skill it named. Rules run in order and the last match wins,
+so a broad `allow` must come first, and agent-level rules are applied after global ones.
 
 ## Verify the frontmatter after any edit
 

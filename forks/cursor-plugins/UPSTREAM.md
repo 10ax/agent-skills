@@ -36,6 +36,7 @@ is broken.
 | 16 of cursor-team-kit's 18 skills | Only `thermo-nuclear-code-quality-review` and `deslop` are imported. The rest are CI, PR and shipping skills that duplicate what is already installed here |
 | cursor-team-kit's `ci-watcher` agent | Same reason as the 16 skills |
 | cursor-team-kit's `.mdc` rules | OpenCode has no rules mechanism. The two rules are generic TypeScript preferences |
+| `pstack/skills/tdd` | Deleted on 2026-10-31, when `mattpocock/skills` arrived with a `tdd` of its own. One id cannot mean two things: upstream's is the model-invoked reference that `implement` and `implement-spec` call by name, so the id now points there. `poteto-help`'s table lost its row; the two playbooks that mention `/tdd` still resolve |
 
 ## The ported files
 
